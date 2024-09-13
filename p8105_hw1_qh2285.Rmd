@@ -13,18 +13,96 @@ knitr::opts_chunk$set(echo = TRUE)
 
 This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this.
 
-```{r cars}
-summary(cars)
+
+
+# Problem 1
+```{r}
+library("palmerpenguins")
 ```
 
-## Including Plots
+```{r}
+data("penguins", package = "palmerpenguins")
+head(penguins)
+mean(penguins$flipper_length_mm, na.rm = TRUE)
+```
+The penguins dataset includes 6 rows 8 columns. All 6 penguins are species Adelie from island Torgersen in year 2007. They have different bill_length_mm, bill_depth_mm, flipper_length_mm, body_mass_g, sex. The mean flipper length is 200.9152mm.
 
-You can also embed plots, for example:
+```{r}
+library(ggplot2)
+library(palmerpenguins)
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+p = ggplot(penguins, aes(x = bill_length_mm, y = flipper_length_mm, color = species)) +
+  geom_point() +
+  labs(x = "Bill Length (mm)", y = "Flipper Length (mm)", color = "Species") 
+print(p)
+
+ggsave("problem1_scatterplot.png", plot = p)
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+# Problem 2
+
+* Create data frame：
+```{r}
+random_sample = rnorm(10)
+logical_vector = random_sample > 0
+character_vector = sample(letters, 10)
+factor_levels = c("L1", "L2", "L3")
+factor_vector = factor(sample(factor_levels, 10, replace = TRUE))
+
+data_frame = data.frame(random_sample, logical_vector, character_vector, factor_vector)
+print(data_frame)
+```
+
+* Take the mean of each variable in above dataframe:
+
+1. Mean of random_sample:
+```{r}
+library(tidyverse)
+
+mean_random_sample =  mean(pull(data_frame, random_sample))
+print(mean_random_sample)
+
+```
+Mean of random_sample works.
+
+2. Mean of logical_vector:
+```{r}
+
+mean_logical_vector =  mean(pull(data_frame, logical_vector))
+print(mean_logical_vector)
+
+```
+Mean of logical_vector works.
+
+3. Mean of character_vector:
+```{r}
+
+mean_character_vector =  mean(pull(data_frame, character_vector))
+print(mean_character_vector)
+
+```
+Mean of character_vector doesn't work.
+
+4. Mean of factor_vector
+```{r}
+
+mean_factor_vector =  mean(pull(data_frame, factor_vector))
+print(mean_factor_vector)
+
+```
+Mean of factor_vector doesn't work.
+
+
+* Convert variables to numerical variables: 
+```{r, echo=TRUE, results='hide'}
+numeric_logical = as.numeric(data_frame$logical_vector)
+
+numeric_character = as.numeric(data_frame$character_vector)
+
+numeric_factor = as.numeric(data_frame$factor_vector)
+```
+Only numeric_character shows warning, because as.numeric() extracts the inner numbers encoding of variables and no numbers are in character_vector.
+R convert "False" and "True" in logical_vector into 0 and 1, so mean of logical_vector can be calculated and can be converted to numerical variables.
+Partial factor_vector include number, e.g. "L1" convert to 1. But mean of character_vector cannot be calculated when character_vector is still not numerical variable.
