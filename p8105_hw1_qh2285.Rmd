@@ -25,9 +25,11 @@ library("palmerpenguins")
 ```{r}
 data("penguins", package = "palmerpenguins")
 head(penguins)
+nrow(penguins)
+ncol(penguins)
 mean(penguins$flipper_length_mm, na.rm = TRUE)
 ```
-The penguins dataset includes 6 rows 8 columns. All 6 penguins are species Adelie from island Torgersen in year 2007. They have different bill_length_mm, bill_depth_mm, flipper_length_mm, body_mass_g, sex. The mean flipper length is 200.9152mm.
+The penguins dataset includes 344 rows 8 columns. All 6 penguins are species Adelie from island Torgersen in year 2007. They have different bill_length_mm, bill_depth_mm, flipper_length_mm, body_mass_g, sex. The mean flipper length is 200.9152 mm.
 
 ```{r}
 library(ggplot2)
